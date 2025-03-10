@@ -23,28 +23,6 @@ class Player:
             return False
         
         return True
-    
-    def passwsec(self):
-        print("Enter your password (asterisks will be displayed):")
-        password = ""
-        while True:
-            event = keyboard.read_event()
-            if event.event_type == keyboard.KEY_DOWN:
-                if event.name == 'enter':
-                    break
-                elif event.name == 'backspace':
-                    if password:
-                        password = password[:-1]
-                        sys.stdout.write('\b \b')
-                        sys.stdout.flush()
-                elif event.name in ['shift', 'ctrl', 'alt', 'left shift', 'right shift', 'left ctrl', 'right ctrl', 'left alt', 'right alt', 'caps lock']:
-                    pass
-                else:
-                    password += event.name
-                    sys.stdout.write('*')
-                    sys.stdout.flush()
-        self.password = password
-        print("\nPassword entered.") 
         
         
     def accCreate(self):
@@ -66,12 +44,11 @@ class Player:
         self.email = str(input("Enter you email: ")).strip()
             
         while True:
-            self.passwsec()
+            self.password = getpass.getpass("Enter your password: ")
             if self.validate_passw(self.password):
                 break
             else:
                 print("Password must not contain spaces. Please enter the password again.")
-                
         
         self.name = str(input('Enter your full name: ').strip().capitalize())
         
@@ -79,15 +56,13 @@ class Player:
         
         with open('dataBase.txt', 'a') as f:
             json.dump(self.login, f)
-            f.write('\n')
             
-        return f"An account for {self.email} has been created!"
+        
+        print(f"An account for {self.email} has been created!")
         
         
         
     def getUserInfo(self):
         return f"Player's name: {self.name}\nPlayer's email: {self.email}\nPlayer's password: {self.password}"        
 
-user = Player()
 
-print(user.accCreate())
