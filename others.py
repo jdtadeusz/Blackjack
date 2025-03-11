@@ -3,8 +3,41 @@ import sys
 import msvcrt
 import keyboard
 import json
+import os
+import dataBaseControl
+import player
 
 
+def menu():
+    clearConsole()
+    dataBaseControl.fileCreate()
+    
+    print(("MENU:\n\n1. Log in\n2. Sign up\n3. About Us\n4. Regulations"))
+    try:
+        player_c = player.Player()
+        choice = int(input("\nOPTION:"))
+        if choice == 1:
+            d = player_c.loginAccount()
+            
+            if d is True:
+                pass
+            else:
+                closeWebsite()
+        elif choice == 2:
+            player_c.accCreate()
+        elif choice == 3:
+            pass
+        elif choice == 4:
+            pass
+        else:
+            print("Invalid choice. Try again.")
+            time.sleep(2)
+            menu()
+    except ValueError:
+        print("Invalid choice. Try again.")
+        time.sleep(2)
+        menu()
+        
 def closeWebsite():
     print("\nCLOSE ANY BUTTON TO CLOSE WEBSITE")
     print("\nThe website will close automaticly in:\n")
@@ -19,17 +52,7 @@ def closeWebsite():
     sys.stdout.flush()
     sys.exit()
     
-def dataBasePrint():
-    try:
-        with open('dataBase.txt', 'r') as f:
-            data = json.load(f)  # Odczytanie danych JSON jako listy słowników
-            for user in data:  # Iteracja po liście słowników
-                print(user)
-    except FileNotFoundError:
-        print("Plik dataBase.txt nie istnieje.")
-    except json.JSONDecodeError:
-        print("Plik dataBase.txt zawiera niepoprawne dane JSON.")
-    except Exception as e:
-        print(f"Wystąpił błąd podczas odczytu pliku: {e}")
-            
-dataBasePrint()
+
+def clearConsole():
+    clear = lambda: os.system('cls')
+    clear()

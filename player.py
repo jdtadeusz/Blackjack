@@ -55,12 +55,34 @@ class Player:
         self.login = {self.email: self.password}
         
         with open('dataBase.txt', 'a') as f:
-            json.dump(self.login, f)
+            f.write(f"{self.email}={self.password}\n")
             
         
         print(f"An account for {self.email} has been created!")
         
+    def loginAccount(self):
+        self.email = input("E-mail: ")
+        self.password = input("Password: ")
         
+        try:
+            with open("dataBase.txt", 'r') as f:
+                for user in f:
+                    email, password = user.strip().split("=")
+                    if email == self.email and password == self.password:
+                        print("Logn successful!")
+                        return True 
+                    else:
+                        print("Invalid email or password. Try again.")
+                        return False 
+        except FileNotFoundError:
+            print("Data base not found.")
+            return False
+        except ValueError:
+            print("Database file is corrupted. Please check the content.")
+            return False
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return False 
         
     def getUserInfo(self):
         return f"Player's name: {self.name}\nPlayer's email: {self.email}\nPlayer's password: {self.password}"        

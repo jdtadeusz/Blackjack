@@ -9,18 +9,19 @@ class Deck:
         random.shuffle(self.cards)
         
     def draw_card(self):
-        self.score = 0
         if self.cards:
             return self.cards.pop()
         else:
             return None
         
     def scoreCard(self, card):
+        self.score = 0
         rank, _ = card
         
         if rank in ['J', 'Q', 'K']:
-            return 10
+            self.score += 10
         elif rank == 'A':
-            return 11
+            self.score += 11
         else:
-            return int(rank)
+            self.score += int(rank)
+            

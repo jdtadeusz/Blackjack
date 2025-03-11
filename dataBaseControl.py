@@ -7,8 +7,8 @@ def fileCreate():
             f.close()  
             print("File dataBase.txt has been created.")
         except FileExistsError:
-            print("The file already exists")
+            pass
         except Exception as e:
             print(f"Error while creating a file: {e}")
     else:
-        print("The file already exists")
+        pass

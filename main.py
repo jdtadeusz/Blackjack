@@ -3,10 +3,16 @@ import player
 import dataBaseControl 
 import desk
 import others
+import os
+import time
 
 
-dataBaseControl.fileCreate()
+    
+    
+others.menu()
 
-player_c = player.Player()
+user = player.Player
 
-player_c.accCreate()
+
+
+
