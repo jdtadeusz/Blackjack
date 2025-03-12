@@ -24,7 +24,14 @@ def menu():
             else:
                 closeWebsite()
         elif choice == 2:
-            player_c.accCreate()
+            d = player_c.accCreate()
+
+            if d is True:
+                print("Press enter to log in...")
+                input()
+                player_c.loginAccount()
+            else:
+                closeWebsite()
         elif choice == 3:
             pass
         elif choice == 4:
@@ -56,3 +63,4 @@ def closeWebsite():
 def clearConsole():
     clear = lambda: os.system('cls')
     clear()
+

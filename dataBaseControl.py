@@ -12,3 +12,17 @@ def fileCreate():
             print(f"Error while creating a file: {e}")
     else:
         pass
+    
+def createWallet():
+        if not os.path.exists("myWallet.txt"):
+            try:
+                f = open("myWallet.txt", 'x')
+                f.close()  
+                print("Your wallet has been created.")
+            except FileExistsError:
+                pass
+            except Exception as e:
+                print(f"Error while creating a file: {e}")
+        else:
+            pass
+        

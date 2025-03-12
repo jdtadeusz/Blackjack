@@ -56,13 +56,16 @@ class Player:
         
         with open('dataBase.txt', 'a') as f:
             f.write(f"{self.email}={self.password}\n")
-            
         
-        print(f"An account for {self.email} has been created!")
+        print(f"\nAn account for {self.email} has been created!")
+        
+        return True
         
     def loginAccount(self):
+        others.clearConsole()
+        
         self.email = input("E-mail: ")
-        self.password = input("Password: ")
+        self.password = getpass.getpass("Password: ")
         
         try:
             with open("dataBase.txt", 'r') as f:
@@ -70,10 +73,9 @@ class Player:
                     email, password = user.strip().split("=")
                     if email == self.email and password == self.password:
                         print("Logn successful!")
-                        return True 
-                    else:
-                        print("Invalid email or password. Try again.")
-                        return False 
+                        return True
+                print("Invalid email or password. Try again.")
+                return False 
         except FileNotFoundError:
             print("Data base not found.")
             return False
@@ -87,4 +89,29 @@ class Player:
     def getUserInfo(self):
         return f"Player's name: {self.name}\nPlayer's email: {self.email}\nPlayer's password: {self.password}"        
 
-
+    def createWallet(self):
+        self.money = 0
+        try:
+            with open("myWallet.txt", 'r') as f:
+                for line in f:
+                    email, _ = line.strip().split("=")
+                    if email == self.email:
+                        return 
+        except FileNotFoundError:
+            pass 
+        with open("myWallet.txt", 'a') as f:
+            f.write(f"{self.email}={self.money}\n")
+            
+    def addMoney(self, amount): #poprawic
+        self.amount = amount
+        with open("myWallet.txt", 'r+') as f:
+            try:
+                for wallet in f:
+                    if wallet.strip("=")[0] == self.email:
+                        #wallet.write(f"{self.email}={self.money+=self.amount}")
+                        pass
+                    else:
+                        pass
+            except ValueError:
+                print("No such user.")
+                
