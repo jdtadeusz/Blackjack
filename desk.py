@@ -24,4 +24,5 @@ class Deck:
             self.score += 11
         else:
             self.score += int(rank)
+        print(self.score)
             
