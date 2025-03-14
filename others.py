@@ -6,30 +6,31 @@ import json
 import os
 import dataBaseControl
 import player
+import deck
 
 
-def menu():
+def menu(player_instance):
     clearConsole()
     dataBaseControl.fileCreate()
     
     print(("MENU:\n\n1. Log in\n2. Sign up\n3. About Us\n4. Regulations"))
     try:
-        player_c = player.Player()
         choice = int(input("\nOPTION:"))
         if choice == 1:
-            d = player_c.loginAccount()
-            
-            if d is True:
-                pass
-            else:
-                closeWebsite()
+            d = player_instance.loginAccount()
+            if d:
+                submenu(player_instance)
         elif choice == 2:
-            d = player_c.accCreate()
+            d = player_instance.accCreate()
 
             if d is True:
+                player_instance.createWallet()
                 print("Press enter to log in...")
                 input()
-                player_c.loginAccount()
+                d = player_instance.loginAccount()
+                if d is True:
+                    time.sleep(2)
+                    submenu(player_instance)
             else:
                 closeWebsite()
         elif choice == 3:
@@ -45,6 +46,34 @@ def menu():
         time.sleep(2)
         menu()
         
+def submenu(player_instance):
+    clearConsole()
+    game_deck = deck.Deck()
+
+    print("1. Play Blackjack\n2. Wallet\n3. Log out")
+    choice = int(input(': '))
+
+    if choice == 1:
+        game_deck.play_blackjack()
+    elif choice == 2:
+        with open('myWallet.txt', 'r+') as f:
+            lines = f.readlines()
+            f.seek(0)
+            amount = None
+            for line in lines:
+                email, money = line.strip().split("=")
+                if email == player_instance.email:
+                    amount = money
+                    break
+            if amount is not None:
+                print(f"Your balance: {amount}")
+            else:
+                print("User wallet not found.")
+
+            print("\n1. Deposit money\n2. Withdraw money\n3. Go back")
+            choice = int(input(': '))
+            if choice == 1:
+                player_instance.addMoney()
 def closeWebsite():
     print("\nCLOSE ANY BUTTON TO CLOSE WEBSITE")
     print("\nThe website will close automaticly in:\n")

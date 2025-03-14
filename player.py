@@ -64,28 +64,29 @@ class Player:
     def loginAccount(self):
         others.clearConsole()
         
-        self.email = input("E-mail: ")
-        self.password = getpass.getpass("Password: ")
-        
-        try:
-            with open("dataBase.txt", 'r') as f:
-                for user in f:
-                    email, password = user.strip().split("=")
-                    if email == self.email and password == self.password:
-                        print("Logn successful!")
-                        return True
-                print("Invalid email or password. Try again.")
-                return False 
-        except FileNotFoundError:
-            print("Data base not found.")
-            return False
-        except ValueError:
-            print("Database file is corrupted. Please check the content.")
-            return False
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-            return False 
-        
+        while True:
+            self.email = input("E-mail: ")
+            self.password = getpass.getpass("Password: ")
+            
+            try:
+                with open("dataBase.txt", 'r') as f:
+                    for user in f:
+                        email, password = user.strip().split("=")
+                        if email == self.email and password == self.password:
+                            print("Logn successful!")
+                            return True
+                    print("Invalid email or password. Try again.")
+            except FileNotFoundError:
+                print("Data base not found.")
+            except ValueError:
+                print("Database file is corrupted. Please check the content.")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
+            
+            choice = int(input("Try again?\n1.Yes\n2.No\n\n: "))
+            if choice != 1:
+                others.closeWebsite()
+
     def getUserInfo(self):
         return f"Player's name: {self.name}\nPlayer's email: {self.email}\nPlayer's password: {self.password}"        
 
@@ -102,16 +103,24 @@ class Player:
         with open("myWallet.txt", 'a') as f:
             f.write(f"{self.email}={self.money}\n")
             
-    def addMoney(self, amount): #poprawic
-        self.amount = amount
-        with open("myWallet.txt", 'r+') as f:
-            try:
-                for wallet in f:
-                    if wallet.strip("=")[0] == self.email:
-                        #wallet.write(f"{self.email}={self.money+=self.amount}")
-                        pass
+    def addMoney(self): 
+        try:
+            with open("myWallet.txt", 'r+') as f:
+                lines = f.readlines()
+                f.seek(0)
+                amount = float(input("How much money would You like to deposit?\n: "))
+                found = False
+                for line in lines:
+                    email, money = line.strip().split("=")
+                    if email == self.email:
+                        found = True
+                        money = float(money) + amount
+                        f.write(f"{self.email}={money}\n")
                     else:
-                        pass
-            except ValueError:
-                print("No such user.")
-                
+                        f.write(line)
+                if not found:
+                    print("No such user.")
+        except FileNotFoundError:
+            print("Wallet file not found.")
+        except ValueError:
+            print("Wallet file corrupted.")

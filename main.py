@@ -5,15 +5,12 @@ import deck
 import others
 import os
 import time
+import subprocess
 
-
+user = player.Player() # instancja gracza
     
-user = player.Player
-    
-#others.menu()
+others.menu(user)
 
-user.createWallet()
-#user.addMoney()
 
 
 

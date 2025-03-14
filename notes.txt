@@ -1,0 +1,4 @@
+dodac wyplacanie pieniedzy z konta
+dodac wylogowywanie 
+dodac ponowna probe logowania 
+dodac opcje rejestracji po blednym logowaniu 
