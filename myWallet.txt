@@ -1,4 +1,2 @@
 mm@agh.pl=400.0
 sj@met.pl=283.33
-huj.pl=0.0
-afryka@pl=0.00
