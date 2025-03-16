@@ -1,4 +1,8 @@
-dodac wyplacanie pieniedzy z konta
-dodac wylogowywanie 
-dodac ponowna probe logowania 
-dodac opcje rejestracji po blednym logowaniu 
+dodano:
+- wyplacanie pieniedzy
+- ponowna probe logowania 
+- wylogowywanie 
+- opcja rejestracji po blednym logowaniu
+
+naprawic to, ze przy kilkukrotnym wyplacaniu pieniedzy tworza sie puste linie na koncu pliku myWallet.txt co prowadzi do ValueError 
+

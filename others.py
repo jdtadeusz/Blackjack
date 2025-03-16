@@ -17,19 +17,39 @@ def menu(player_instance):
     try:
         choice = int(input("\nOPTION:"))
         if choice == 1:
-            d = player_instance.loginAccount()
-            if d:
-                submenu(player_instance)
+            while True:
+                d = player_instance.loginAccount()
+                if d:
+                    submenu(player_instance)
+                    break
+                else:
+                        print("\n\n1. Try again\n2. Create an account\n3. Exit")
+                        choice = int(input(": "))
+                        if choice == 1:
+                            continue
+                        elif choice == 2:
+                            d = player_instance.accCreate()
+                            if d:
+                                player_instance.createWallet
+                                print("Press enter to log in...")
+                                input()
+                                continue
+                            else:
+                                closeWebsite()
+                                break
+                        else:
+                            closeWebsite()
+                            break
+                    
         elif choice == 2:
             d = player_instance.accCreate()
 
-            if d is True:
+            if d:
                 player_instance.createWallet()
                 print("Press enter to log in...")
                 input()
                 d = player_instance.loginAccount()
-                if d is True:
-                    time.sleep(2)
+                if d:
                     submenu(player_instance)
             else:
                 closeWebsite()
@@ -38,13 +58,13 @@ def menu(player_instance):
         elif choice == 4:
             pass
         else:
-            print("Invalid choice. Try again.")
-            time.sleep(2)
-            menu()
+            print("\nInvalid choice. Press enter to try again...")
+            input()
+            menu(player_instance)
     except ValueError:
-        print("Invalid choice. Try again.")
-        time.sleep(2)
-        menu()
+        print("\nInvalid choice. Press enter to try again...ss")
+        input()
+        menu(player_instance)
         
 def submenu(player_instance):
     clearConsole()
@@ -57,6 +77,7 @@ def submenu(player_instance):
         game_deck.play_blackjack()
     elif choice == 2:
         with open('myWallet.txt', 'r+') as f:
+            clearConsole()
             lines = f.readlines()
             f.seek(0)
             amount = None
@@ -73,7 +94,28 @@ def submenu(player_instance):
             print("\n1. Deposit money\n2. Withdraw money\n3. Go back")
             choice = int(input(': '))
             if choice == 1:
-                player_instance.addMoney()
+                d = player_instance.addMoney()
+                if d:
+                    while True:
+                        print("The amount has been added to Your balance!\n\nPress enter to continue...")
+                        input()
+                        submenu(player_instance)
+            elif choice == 2:
+                d = player_instance.withdrawMoney()
+                if d:
+                    while True:
+                        print("The amount has been withdrawn from Your balance!\n\nPress enter to continue...")
+                        input()
+                        submenu(player_instance)      
+                else:
+                    print("Not enough money to withdraw.\n\nPress enter to continue...")
+                    input()
+                    submenu(player_instance)          
+            elif choice == 3:
+                submenu(player_instance)
+    elif choice == 3:
+        player_instance.logOut()
+        menu(player_instance)
 def closeWebsite():
     print("\nCLOSE ANY BUTTON TO CLOSE WEBSITE")
     print("\nThe website will close automaticly in:\n")

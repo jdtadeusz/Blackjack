@@ -26,14 +26,19 @@ class Player:
         
         
     def accCreate(self):
-        
+        others.clearConsole()
+
+
         while True:
+            print("REGISTRATION\n")
             try: 
                 birth_date_str = input("Enter your date of birth (YYYY-MM-DD): ")
                 self.birthDate = datetime.strptime(birth_date_str, "%Y-%m-%d").date()
                 break
             except ValueError:
-                print("Invalid date format. Please use YYYY-MM-DD")
+                print("Invalid date format. Please use YYYY-MM-DD\n\nPress enter to try again...")
+                input()
+                others.clearConsole()
                 
         if self.ageConsent(self.birthDate):
             pass
@@ -62,9 +67,11 @@ class Player:
         return True
         
     def loginAccount(self):
-        others.clearConsole()
         
         while True:
+            others.clearConsole()
+            
+            print("LOGIN\n")
             self.email = input("E-mail: ")
             self.password = getpass.getpass("Password: ")
             
@@ -73,9 +80,13 @@ class Player:
                     for user in f:
                         email, password = user.strip().split("=")
                         if email == self.email and password == self.password:
-                            print("Logn successful!")
+                            print("\nLogged in successful!\nPress enter to continue...")
+                            input()
                             return True
-                    print("Invalid email or password. Try again.")
+                        else:
+                            print("\n!! Invalid email or password !!")
+                            return False
+
             except FileNotFoundError:
                 print("Data base not found.")
             except ValueError:
@@ -83,10 +94,7 @@ class Player:
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
             
-            choice = int(input("Try again?\n1.Yes\n2.No\n\n: "))
-            if choice != 1:
-                others.closeWebsite()
-
+            
     def getUserInfo(self):
         return f"Player's name: {self.name}\nPlayer's email: {self.email}\nPlayer's password: {self.password}"        
 
@@ -95,7 +103,9 @@ class Player:
         try:
             with open("myWallet.txt", 'r') as f:
                 for line in f:
-                    email, _ = line.strip().split("=")
+                    parts = line.strip().split("=")
+                    email, _ = parts
+
                     if email == self.email:
                         return 
         except FileNotFoundError:
@@ -104,6 +114,7 @@ class Player:
             f.write(f"{self.email}={self.money}\n")
             
     def addMoney(self): 
+        others.clearConsole()
         try:
             with open("myWallet.txt", 'r+') as f:
                 lines = f.readlines()
@@ -111,16 +122,66 @@ class Player:
                 amount = float(input("How much money would You like to deposit?\n: "))
                 found = False
                 for line in lines:
-                    email, money = line.strip().split("=")
-                    if email == self.email:
-                        found = True
-                        money = float(money) + amount
-                        f.write(f"{self.email}={money}\n")
-                    else:
-                        f.write(line)
+                    parts = line.strip().split("=")
+                    if len(parts) == 2:
+                        email, money = parts
+                        if email == self.email:
+                            found = True
+                            money = float(money) + amount
+                            f.write(f"{self.email}={money}\n")
+                        else:
+                            f.write(line)
                 if not found:
                     print("No such user.")
+                    return False
+                return True
+        except FileNotFoundError:
+            print("Wallet file not found.")
+            return False
+        except ValueError:
+            print("Wallet file corrupted.")
+            return False
+
+    def logOut(self):
+        self.email = None
+        self.name = None 
+        self.password = None 
+        self.birthDate = None
+        self.money = 0
+
+        print("Logged out successfully.\n\nPress enter to continue...")
+        input()
+
+    def withdrawMoney(self):
+        try:
+            with open('myWallet.txt', 'r+') as f:
+                lines = f.readlines()
+                f.seek(0)
+                found = False
+                for line in lines:
+                    parts = line.strip().split('=')
+                    if len(parts) == 2:
+                        email, money = parts
+                        if email == self.email:
+                            found = True
+                            if float(money) > 0:
+                                amount = float(input("How much money would You like to withdraw?\n\n: "))
+                                if amount > float(money):
+                                    return False
+                                else:
+                                    money = float(money) - amount
+                                    f.write(f"{self.email}={money}\n")
+                            else:
+                                return False
+
+                        else: 
+                            f.write(line)
+                if not found:
+                    print("No such user.")
+                    return False
+                return True
         except FileNotFoundError:
             print("Wallet file not found.")
         except ValueError:
             print("Wallet file corrupted.")
+                        

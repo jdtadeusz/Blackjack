@@ -1,1 +1,5 @@
 mm@agh.pl=mm
+sj@met.pl=seba
+huj.pl=h
+afryka@pl=aa
+kn@agh.pl=kn
