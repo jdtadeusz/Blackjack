@@ -23,23 +23,23 @@ def menu(player_instance):
                     submenu(player_instance)
                     break
                 else:
-                        print("\n\n1. Try again\n2. Create an account\n3. Exit")
-                        choice = int(input(": "))
-                        if choice == 1:
-                            continue
-                        elif choice == 2:
-                            d = player_instance.accCreate()
-                            if d:
-                                player_instance.createWallet
-                                print("Press enter to log in...")
-                                input()
-                                continue
-                            else:
-                                closeWebsite()
-                                break
+                    print("\n\n1. Try again\n2. Create an account\n3. Exit")
+                    choice = int(input(": "))
+                    if choice == 1:
+                        continue
+                    elif choice == 2:
+                        d = player_instance.accCreate()
+                        if d:
+                            player_instance.createWallet()
+                            print("Press enter to log in...")
+                            input()
+                            break
                         else:
                             closeWebsite()
                             break
+                    else:
+                        closeWebsite()
+                        break
                     
         elif choice == 2:
             d = player_instance.accCreate()
@@ -116,6 +116,7 @@ def submenu(player_instance):
     elif choice == 3:
         player_instance.logOut()
         menu(player_instance)
+
 def closeWebsite():
     print("\nCLOSE ANY BUTTON TO CLOSE WEBSITE")
     print("\nThe website will close automaticly in:\n")
@@ -128,8 +129,7 @@ def closeWebsite():
             sys.exit()
             print(" " * 10, end='\r') 
     sys.stdout.flush()
-    sys.exit()
-    
+    sys.exit()   
 
 def clearConsole():
     clear = lambda: os.system('cls')

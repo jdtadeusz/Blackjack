@@ -22,8 +22,7 @@ class Player:
             print(f"You must be at least 18 years old to create an account. You can come back on {returnAge.strftime('%Y-%m-%d')}")
             return False
         
-        return True
-        
+        return True  
         
     def accCreate(self):
         others.clearConsole()
@@ -77,24 +76,34 @@ class Player:
             
             try:
                 with open("dataBase.txt", 'r') as f:
-                    for user in f:
-                        email, password = user.strip().split("=")
-                        if email == self.email and password == self.password:
-                            print("\nLogged in successful!\nPress enter to continue...")
-                            input()
-                            return True
+                    lines = f.readlines()
+                    found = False
+                    for line in lines:
+                        parts = line.strip().split("=")
+                        if len(parts) == 2:
+                            email, password = parts
+                            password = password.strip()
+                            if email == self.email and password == self.password:
+                                print("\nLogged in successful!\nPress enter to continue...")
+                                input()
+                                found = True
+                                break
                         else:
-                            print("\n!! Invalid email or password !!")
-                            return False
-
+                            print(f"\nWarning: Invalid line format {line.strip()}")
+                    else:
+                        print("\n!! Invalid email or password !!")
+                        return False
+                    
+                    if found:
+                        return True
+                    
             except FileNotFoundError:
                 print("Data base not found.")
             except ValueError:
                 print("Database file is corrupted. Please check the content.")
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
-            
-            
+                    
     def getUserInfo(self):
         return f"Player's name: {self.name}\nPlayer's email: {self.email}\nPlayer's password: {self.password}"        
 
@@ -128,7 +137,7 @@ class Player:
                         if email == self.email:
                             found = True
                             money = float(money) + amount
-                            f.write(f"{self.email}={money}\n")
+                            f.write(f"{self.email}={money}")
                         else:
                             f.write(line)
                 if not found:
